@@ -46,7 +46,7 @@ class SpinningWheelPageState extends State<SpinningWheelPage> {
       Future.delayed(const Duration(seconds: 2), () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => AnimatedBanner()),
+          MaterialPageRoute(builder: (context) => const AnimatedBanner()),
         );
       });
     }
@@ -55,7 +55,7 @@ class SpinningWheelPageState extends State<SpinningWheelPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 128, 134, 149),
+      backgroundColor: const Color.fromARGB(255, 128, 134, 149),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
+// import 'dart:math';
 
 class AnimatedBanner extends StatefulWidget {
   const AnimatedBanner({super.key});
@@ -17,7 +17,7 @@ class _AnimatedBannerState extends State<AnimatedBanner>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(seconds: 1),
       vsync: this,
     )..forward();
 
@@ -46,7 +46,7 @@ class _AnimatedBannerState extends State<AnimatedBanner>
             if (!showSecondBanner)
               BannerContent(
                 controller: _controller,
-                text: "Pick 1st item to get AU\$100",
+                text: "Get immediate AU\$100",
                 subText: "Reward issued after checkout",
               )
             else
@@ -81,8 +81,6 @@ class BannerContent extends StatelessWidget {
         SlidingParts(controller: controller),
         // Text in the Center
         CenterText(controller: controller, text: text, subText: subText),
-        // Sparkling Stars
-        SparklingStars(controller: controller),
       ],
     );
   }
@@ -128,7 +126,7 @@ class SlidingParts extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   height: expandAnimation.value,
                   margin: const EdgeInsets.only(top: 20),
-                  color: Color.fromARGB(255, 246, 229, 178),
+                  color: const Color.fromARGB(255, 246, 229, 178),
                 ),
               ),
             ),
@@ -140,7 +138,7 @@ class SlidingParts extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   height: expandAnimation.value,
                   margin: const EdgeInsets.only(bottom: 20),
-                  color: Color.fromARGB(255, 246, 229, 178),
+                  color: const Color.fromARGB(255, 246, 229, 178),
                 ),
               ),
             ),
@@ -150,7 +148,6 @@ class SlidingParts extends StatelessWidget {
     );
   }
 }
-
 class CenterText extends StatelessWidget {
   final AnimationController controller;
   final String text;
@@ -166,77 +163,50 @@ class CenterText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textAnimation = CurvedAnimation(
-        parent: controller,
-        curve: const Interval(0.5, 1.0, curve: Curves.easeInOut));
-
-    return FadeTransition(
-      opacity: textAnimation,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Text(
-              text,
-              style: const TextStyle(
-                  fontSize: 29.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.brown),
-            ),
-          ),
-          Center(
-            child: Text(subText,
-                style: const TextStyle(fontSize: 16.0, color: Colors.brown)),
-          ),
-        ],
-      ),
+      parent: controller,
+      curve: const Interval(0.0, 1.0, curve: Curves.easeInOut),
     );
-  }
-}
 
-class SparklingStars extends StatelessWidget {
-  final AnimationController controller;
-  const SparklingStars({super.key, required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
-    final starAnimation = CurvedAnimation(
-        parent: controller,
-        curve: const Interval(0.5, 1.0, curve: Curves.easeInOut));
-
-    return Stack(
-      children: List.generate(20, (index) {
-        return AnimatedStar(controller: starAnimation, index: index);
-      }),
-    );
-  }
-}
-
-class AnimatedStar extends StatelessWidget {
-  final Animation<double> controller;
-  final int index;
-  const AnimatedStar(
-      {super.key, required this.controller, required this.index});
-
-  @override
-  Widget build(BuildContext context) {
-    final random = Random();
-    final starSize = random.nextDouble() * 5 + 5;
-    final positionLeft =
-        MediaQuery.of(context).size.width / 2 + random.nextDouble() * 50 - 25;
-    final positionTop =
-        MediaQuery.of(context).size.height / 2 + random.nextDouble() * 50 - 25;
-
-    return Positioned(
-      left: positionLeft,
-      top: positionTop,
-      child: FadeTransition(
-        opacity: controller,
-        child: Icon(
-          Icons.star,
-          color: const Color.fromARGB(255, 221, 194, 45),
-          size: starSize,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Animated Main Text
+        AnimatedBuilder(
+          animation: textAnimation,
+          builder: (context, child) {
+            return Transform.scale(
+              scale: 1.5 - 0.5 * textAnimation.value, // From large to small
+              child: Center(
+                child: Text(
+                  text,
+                  style: const TextStyle(
+                    fontSize: 35.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.brown,
+                  ),
+                ),
+              ),
+            );
+          },
         ),
-      ),
+        AnimatedBuilder(
+          animation: textAnimation,
+          builder: (context, child) {
+            return Transform.scale(
+              scale: 1.3 - 0.3 * textAnimation.value, // From large to small
+              child: Center(
+                child: Text(
+                  subText,
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.brown,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
