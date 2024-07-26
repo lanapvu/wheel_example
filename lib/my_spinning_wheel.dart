@@ -259,7 +259,6 @@ class MySpinController {
   late Animation<double> _baseAnimation;
   late List<SpinItem> _itemList;
   bool _isSpinning = false;
-  //int _selectedItem = -1;
   double _currentRotation = 0;
   late TickerProvider _tickerProvider;
 
@@ -271,7 +270,7 @@ class MySpinController {
     _itemList = itemList;
 
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 300),
       vsync: _tickerProvider,
     );
 
@@ -322,7 +321,6 @@ class MySpinController {
           onFinished?.call(_getSelectedIndex());
         }
       });
-
     _animationController.forward(from: 0);
   }
 
